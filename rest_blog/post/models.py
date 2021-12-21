@@ -24,6 +24,9 @@ class Post(models.Model):
       
     return unique
   
+  def __str__(self):
+    return self.title
+  
   def save(self, *args, **kwargs):
     if not self.id:
       self.created = timezone.now()
