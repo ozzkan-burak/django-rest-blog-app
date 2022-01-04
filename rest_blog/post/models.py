@@ -11,7 +11,7 @@ class Post(models.Model):
   created = models.DateTimeField(editable=False)
   modified = models.DateTimeField()
   slug = models.SlugField(unique=True, max_length=150, editable=False, null=True)
-  image = models.ImageField(upload_to='media/post/')
+  image = models.ImageField(upload_to='media/post/', blank=True, null=True)
   
   def get_slug(self):
     slug = slugify(self.title.replace("ı", "i"))
@@ -23,6 +23,9 @@ class Post(models.Model):
       number += 1
       
     return unique
+  
+  def __str__(self):
+    return self.title
   
   def save(self, *args, **kwargs):
     if not self.id:
