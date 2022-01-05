@@ -23,7 +23,7 @@ class PostUpdateAPIView(RetrieveUpdateAPIView):
   lookup_field = 'slug'
   
   def perform_update(self, serializer):
-    serializer.save(user=self.request.user)
+    serializer.save(modified_by=self.request.user)
 
 class PostCreateAPIView(CreateAPIView):
   queryset = Post.objects.all()
