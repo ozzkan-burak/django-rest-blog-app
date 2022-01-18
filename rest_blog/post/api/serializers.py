@@ -10,3 +10,6 @@ class PostUpdateCreateSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Post
         fields = ['title', 'content','image', 'slug', 'created']
+        
+    def save(self, **kwargs):
+        return True

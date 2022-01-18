@@ -1,3 +1,4 @@
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView, CreateAPIView
 from post.models import Post
 from post.api.serializers import PostSerializer, PostUpdateCreateSerializer
@@ -5,8 +6,13 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from post.api.permissions import IsOwner
 
 class PostListAPIView(ListAPIView):
-  queryset = Post.objects.all()
   serializer_class = PostSerializer
+  filter_backends = [SearchFilter, OrderingFilter]
+  search_fields = ['title']
+  
+  def get_queryset(self):
+    queryset = Post.objects.filter(draft=False)
+    return queryset
   
 class PostDetailAPIView(RetrieveAPIView):
   queryset = Post.objects.all()
@@ -17,12 +23,13 @@ class PostDeleteAPIView(DestroyAPIView):
   queryset = Post.objects.all()
   serializer_class = PostSerializer
   lookup_field = 'slug'
+  permission_classes = [IsOwner]
 
 class PostUpdateAPIView(RetrieveUpdateAPIView):
   queryset = Post.objects.all()
   serializer_class = PostUpdateCreateSerializer
   lookup_field = 'slug'
-  permissions_classes = [IsOwner]
+  permission_classes = [IsOwner]
   
   def perform_update(self, serializer):
     serializer.save(modified_by=self.request.user)
