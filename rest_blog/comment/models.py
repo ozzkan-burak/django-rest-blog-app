@@ -28,4 +28,4 @@ class Comment(models.Model):
   
   @property
   def any_children(self):
-    return Comment.abjects.filter(parent = self).exists()
+    return Comment.objects.filter(parent = self).exists()
