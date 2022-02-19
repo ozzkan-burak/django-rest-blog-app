@@ -25,3 +25,8 @@ class CommentListSerializer(ModelSerializer):
     def get_replies(self, obj):
       if obj.any_children:
         return CommentListSerializer(obj.children(), many=True).data
+      
+class CommentDeleteUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'content']
