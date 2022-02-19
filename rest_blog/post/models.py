@@ -11,7 +11,7 @@ class Post(models.Model):
   created = models.DateTimeField(editable=False)
   modified = models.DateTimeField()
   slug = models.SlugField(unique=True, max_length=150, editable=False, null=True)
-  image = models.ImageField(upload_to='media/post/', blank=True, null=True)
+  image = models.ImageField(upload_to='post', blank=True, null=True)
   modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='modifier', null=True)
   
   def get_slug(self):
