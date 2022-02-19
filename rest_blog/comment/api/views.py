@@ -4,6 +4,7 @@ from comment.api.serializers import CommentCreateSerializer, CommentListSerializ
 from comment.models import Comment
 
 from comment.api.permissions import IsOwner
+from comment.api.paginations import CommentPagination
 
 class CommentCreateAPIView(CreateAPIView):
     queryset = Comment.objects.all()
@@ -15,9 +16,17 @@ class CommentCreateAPIView(CreateAPIView):
 
 class CommentListAPIView(ListAPIView):
     serializer_class = CommentListSerializer
-    
+    pagination_class = CommentPagination
     def get_queryset(self):
-      return Comment.objects.filter(parent = None)
+      queryset = Comment.objects.filter(parent = None)
+      query = self.request.GET.get('q')
+      
+      if query:
+        queryset = queryset.filter(post = query)
+        
+      return queryset
+      
+    
     
 class CommentDeleteAPIView(DestroyAPIView):
   queryset = Comment.objects.all()
