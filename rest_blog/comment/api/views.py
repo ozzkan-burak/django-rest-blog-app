@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
-from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
 from comment.api.serializers import CommentCreateSerializer, CommentListSerializer, CommentDeleteUpdateSerializer
 from comment.models import Comment
@@ -30,21 +30,25 @@ class CommentListAPIView(ListAPIView):
       return queryset
       
     
+# bir sonraki classda iki işlemi birleştirdiğimiz için artık bu class a ihtiyaç kalmadı
     
-class CommentDeleteAPIView(DestroyAPIView , UpdateModelMixin, RetrieveModelMixin):
-  queryset = Comment.objects.all()
-  serializer_class = CommentDeleteUpdateSerializer
-  lookup_field = 'pk'
-  permissions_classes = [IsOwner]
+# class CommentDeleteAPIView(DestroyAPIView , UpdateModelMixin, RetrieveModelMixin):
+#   queryset = Comment.objects.all()
+#   serializer_class = CommentDeleteUpdateSerializer
+#   lookup_field = 'pk'
+#   permissions_classes = [IsOwner]
   
-  def put(self, request, *args, **kwargs):
-    return self.update(request, *args, **kwargs)
+#   def put(self, request, *args, **kwargs):
+#     return self.update(request, *args, **kwargs)
   
-  def get(self, request, * args, **kwargs):
-    return self.retrieve(request, *args, **kwargs)
+#   def get(self, request, * args, **kwargs):
+#     return self.retrieve(request, *args, **kwargs)
 
-class CommentUpdateAPIView(UpdateAPIView, RetrieveAPIView):
+class CommentUpdateAPIView(DestroyModelMixin,UpdateAPIView, RetrieveAPIView):
   queryset = Comment.objects.all()
   serializer_class = CommentDeleteUpdateSerializer
   lookup_field = 'pk'
   permissions_classes = [IsOwner]
+  
+  def delete(self, request, *args, **kwargs):
+    return self.destroy(request, *args, **kwargs)
