@@ -1,10 +1,13 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 
 from comment.api.serializers import CommentCreateSerializer, CommentListSerializer, CommentDeleteUpdateSerializer
 from comment.models import Comment
 
 from comment.api.permissions import IsOwner
 from comment.api.paginations import CommentPagination
+
+
 
 class CommentCreateAPIView(CreateAPIView):
     queryset = Comment.objects.all()
@@ -28,11 +31,17 @@ class CommentListAPIView(ListAPIView):
       
     
     
-class CommentDeleteAPIView(DestroyAPIView):
+class CommentDeleteAPIView(DestroyAPIView , UpdateModelMixin, RetrieveModelMixin):
   queryset = Comment.objects.all()
   serializer_class = CommentDeleteUpdateSerializer
   lookup_field = 'pk'
   permissions_classes = [IsOwner]
+  
+  def put(self, request, *args, **kwargs):
+    return self.update(request, *args, **kwargs)
+  
+  def get(self, request, * args, **kwargs):
+    return self.retrieve(request, *args, **kwargs)
 
 class CommentUpdateAPIView(UpdateAPIView, RetrieveAPIView):
   queryset = Comment.objects.all()
