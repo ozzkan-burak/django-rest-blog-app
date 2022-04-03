@@ -10,8 +10,11 @@ class FavouriteListCreateAPISerializer(ModelSerializer):
   def validate(self, attrs):
     
     queryset = Favourite.objects.filter(user=attrs['user'], post=attrs['post'])
-    
     if queryset.exists():
       raise serializers.ValidationError("This is an existing favourite")
     return attrs    
     
+class FavouriteAPISerializer(ModelSerializer):
+  class Meta:
+    model =  Favourite
+    fields = '__all__'
