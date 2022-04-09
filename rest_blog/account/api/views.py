@@ -3,13 +3,15 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
+from account.api.serializers import UserSerializer
+
 class ProfileView(RetrieveUpdateAPIView):
     """
     Profile view
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer = UserSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
