@@ -12,7 +12,7 @@ class ProfileView(RetrieveUpdateAPIView):
     serializer = UserSerializer
     queryset = User.objects.all()
 
-    def get(self, request, *args, **kwargs):
+    def get_object(self, request, *args, **kwargs):
       queryset = self.get_queryset()
       obj = get_object_or_404(queryset, id = self.request.user.id)
       return obj
