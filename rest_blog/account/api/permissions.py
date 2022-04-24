@@ -1,10 +1,7 @@
 from rest_framework.permissions import BasePermission
 
 
-class IsOwner(BasePermission):
+class NotAuthenticated(BasePermission):
+    message = 'You are already authenticated'
     def has_object_permission(self, request, view):
-        return request.user and request.user.isauthenticated
-    
-    message = "You are not the owner of this post."
-    def has_object_permission(self, request, view, obj):
-        return obj.user == request.user
+        return not request.user and not request.user.isauthenticated

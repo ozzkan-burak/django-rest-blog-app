@@ -1,6 +1,9 @@
-from rest_framework.generics import RetrieveUpdateAPIView,get_object_or_404
+from .serializers import RegisterSerializer
+from .permissions import NotAuthenticated
+from rest_framework.generics import RetrieveUpdateAPIView,get_object_or_404, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 from rest_framework.views import APIView 
 from django.shortcuts import render
 from rest_framework.response import Response
@@ -49,6 +52,15 @@ class UpdatePassword(APIView):
         # set_password also hashes the password that the user will get
         self.object.set_password(serializer.data.get("new_password"))
         self.object.save()
+        update_session_auth_hash(request, self.object)
         return Response(status = 200)
       return Response(serializer.errors, status = 400)
     
+class CreateUserView(CreateAPIView):
+    """
+    Create user
+    """
+
+    model = User.objects.all()
+    permission_classes = [NotAuthenticated]
+    serializer_class = RegisterSerializer
