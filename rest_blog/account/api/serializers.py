@@ -1,7 +1,7 @@
 import re
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
-from django.contrib.auth.password_validattion import validate_password
+from django.contrib.auth.password_validation import validate_password
 from account.models import Profile
 
 class ProfileSerializer(ModelSerializer):
