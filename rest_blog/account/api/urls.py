@@ -1,6 +1,6 @@
 from django.urls import path
 
-from account.api.views import  ProfileView, UpdatePassword
+from .views import  ProfileView, UpdatePassword
 
 app_name= "account"
 urlpatterns = [
