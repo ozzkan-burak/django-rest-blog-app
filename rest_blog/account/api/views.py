@@ -1,3 +1,4 @@
+from rest_blog.account.api.throttles import RegisterThrottle
 from .serializers import RegisterSerializer
 from .permissions import NotAuthenticated
 from rest_framework.generics import RetrieveUpdateAPIView,get_object_or_404, CreateAPIView
@@ -5,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from rest_framework.views import APIView 
-from django.shortcuts import render
 from rest_framework.response import Response
 
 from account.api.serializers import UserSerializer, ChangePasswordSerializer
@@ -60,7 +60,7 @@ class CreateUserView(CreateAPIView):
     """
     Create user
     """
-
+    throttle_classes = [RegisterThrottle]
     model = User.objects.all()
     permission_classes = [NotAuthenticated]
     serializer_class = RegisterSerializer

@@ -9,6 +9,7 @@ from post.api.pagination import PostPagination
 from post.api.serializers import PostSerializer, PostUpdateCreateSerializer
 
 class PostListAPIView(ListAPIView, CreateModelMixin):
+  throttle_scope = 'test'
   serializer_class = PostSerializer
   filter_backends = [SearchFilter, OrderingFilter]
   search_fields = ['title', 'content']
